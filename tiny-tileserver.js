@@ -6,7 +6,7 @@ const routes = require("./src/routes");
 const Index = require("./src/index/index");
 const pjson = require("./package.json");
 
-var argv = minimist(process.argv.slice(2), { alias: { p: "port" } });
+var argv = minimist(process.argv.slice(2), { alias: { p: "port", b: "base" } });
 if (argv._.length !== 1) {
   console.log("Usage: node tiny-tileserver.js [options] [rootDirectory]");
   console.log("");
@@ -14,12 +14,15 @@ if (argv._.length !== 1) {
   console.log("");
   console.log("Options:");
   console.log("   -p PORT --port PORT       Set the HTTP port [8000]");
+  console.log("   -b BASE --base BASE       Set the base url [/]");
   console.log("");
   console.log("A root directory is required.");
   process.exit(1);
 }
 
 const app = express();
+
+app.set('base', argv.base);
 
 app.use(function(req, res, next) {
   res.header("X-Powered-By", "Tiny-tileserver v" + pjson.version);
